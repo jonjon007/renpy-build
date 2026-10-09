@@ -216,6 +216,11 @@ def python3(c: Context):
     rules = set(PY3_MODULES.split())
     used_rules = set()
 
+    # Without the Steamworks SDK (tars/steamworks_sdk_162.zip), steam.build
+    # doesn't generate steamapi.py, so don't require it.
+    if not c.path("{{ pytmp }}/steam/steamapi.py").exists():
+        rules.discard("steamapi")
+
     search = [
         c.path("{{ install }}/lib/{{ pythonver }}"),
         c.path("{{ install }}/lib/{{ pythonver }}/site-packages"),
